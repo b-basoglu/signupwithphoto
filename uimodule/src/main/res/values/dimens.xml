@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_sheet_corner_radius">20dp</dimen>
+    <dimen name="margin_bottom_sheet_vertical">16dp</dimen>
+    <dimen name="row_bottom_sheet_vertical">12dp</dimen>
+    <dimen name="row_bottom_sheet_horizontal">16dp</dimen>
+    <dimen name="margin_bottom_sheet_horizontal">24dp</dimen>
+    <dimen name="text_size_bottom_sheet">16sp</dimen>
+    <dimen name="text_size_space_drawable">18dp</dimen>
+    <dimen name="icon_size_filter">32dp</dimen>
+
+</resources>
