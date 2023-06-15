@@ -19,6 +19,9 @@ class SignUpViewModel @Inject constructor(
     private val signUpSaveUseCase: SignUpSaveUseCase
 ): BaseViewModel(){
 
+    private val mTriggerPhoto: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    val triggerPhoto : StateFlow<Boolean?> = mTriggerPhoto
+
     private val mErrorStateFlow : MutableStateFlow<ErrorType?> = MutableStateFlow(null)
     val errorStateFlow : StateFlow<ErrorType?> = mErrorStateFlow
 
@@ -62,6 +65,13 @@ class SignUpViewModel @Inject constructor(
 
     fun clearNavigateState(){
         mNavigatorStateFlow.value = null
+    }
+    fun clearTriggerPhoto(){
+        mTriggerPhoto.value = null
+    }
+
+    fun triggerPhotoStart(){
+        mTriggerPhoto.value = true
     }
 
     private fun mapUiModel(loginFragmentDataModel: SignUpFragmentUiModel)=
