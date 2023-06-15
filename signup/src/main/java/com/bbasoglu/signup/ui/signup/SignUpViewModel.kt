@@ -19,9 +19,6 @@ class SignUpViewModel @Inject constructor(
     private val signUpSaveUseCase: SignUpSaveUseCase
 ): BaseViewModel(){
 
-    private val mSignUpFragmentUiModel : MutableStateFlow<SignUpFragmentUiModel> = MutableStateFlow(SignUpFragmentUiModel())
-    val signUpFragmentUiModel : StateFlow<SignUpFragmentUiModel> = mSignUpFragmentUiModel
-
     private val mErrorStateFlow : MutableStateFlow<ErrorType?> = MutableStateFlow(null)
     val errorStateFlow : StateFlow<ErrorType?> = mErrorStateFlow
 
@@ -67,13 +64,6 @@ class SignUpViewModel @Inject constructor(
         mNavigatorStateFlow.value = null
     }
 
-    fun setSignUpFragmentUiModel(signUpFragmentUiModel:SignUpFragmentUiModel){
-        mSignUpFragmentUiModel.value = signUpFragmentUiModel
-    }
-
-    fun alterPathSignUpFragmentUiModel(path:String){
-        mSignUpFragmentUiModel.value = mSignUpFragmentUiModel.value.copy(path = path)
-    }
     private fun mapUiModel(loginFragmentDataModel: SignUpFragmentUiModel)=
         LoginFragmentDataModel(
             name = loginFragmentDataModel.name,

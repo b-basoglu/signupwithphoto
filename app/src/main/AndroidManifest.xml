@@ -50,7 +50,7 @@
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|layoutDirection|uiMode"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            android:screenOrientation="portrait">
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
