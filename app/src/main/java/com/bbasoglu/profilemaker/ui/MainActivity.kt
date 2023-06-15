@@ -60,17 +60,4 @@ class MainActivity : BaseActivity(), BaseActivity.ActivityListener {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-    fun onBack() {
-        when (navController.currentDestination?.id) {
-            com.bbasoglu.signup.R.id.loginFragment -> {
-                finish()
-            }
-            else -> {
-                navController.navigateUp()
-            }
-        }
-    }
-
-
 }

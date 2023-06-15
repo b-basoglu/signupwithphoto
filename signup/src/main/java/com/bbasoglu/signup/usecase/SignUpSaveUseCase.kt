@@ -1,5 +1,6 @@
 package com.bbasoglu.signup.usecase
 
+import android.text.TextUtils
 import com.bbasoglu.core.data.SignUpCoreDataStore
 import com.bbasoglu.core.network.NetworkResponse
 import com.bbasoglu.signup.data.model.data.LoginFragmentDataModel
@@ -39,4 +40,8 @@ class SignUpSaveUseCase @Inject constructor(
     }
 
     data class Param(val body: LoginFragmentDataModel?)
+
+    fun isValidParam(parameter: LoginFragmentDataModel?): Boolean {
+        return !TextUtils.isEmpty(parameter?.password) && !TextUtils.isEmpty(parameter?.email)
+    }
 }

@@ -1,6 +1,7 @@
 package com.bbasoglu.signup.ui.signup.adapter
 
 import com.bbasoglu.signup.data.model.data.LoginFragmentDataModel
+import com.bbasoglu.signup.data.model.ui.SignUpFragmentUiModel
 import com.bbasoglu.signup.ui.signup.adapter.data.SignUpHeaderData
 import com.bbasoglu.signup.ui.signup.adapter.data.SignUpInputViewData
 import com.bbasoglu.signup.ui.signup.adapter.row.SignUpHeaderRow
@@ -26,8 +27,8 @@ class SignUpAdapter(
         }
     }
 
-    fun getLoginData():LoginFragmentDataModel{
-        val result= LoginFragmentDataModel()
+    fun getLoginData():SignUpFragmentUiModel{
+        val result= SignUpFragmentUiModel()
         currentList.forEachIndexed { index, baseAdapterData ->
             if (baseAdapterData is SignUpHeaderData){
                 result.path = baseAdapterData.path

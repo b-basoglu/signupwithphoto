@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bbasoglu.profilemaker">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -48,8 +49,8 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|layoutDirection|uiMode"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="fullSensor">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

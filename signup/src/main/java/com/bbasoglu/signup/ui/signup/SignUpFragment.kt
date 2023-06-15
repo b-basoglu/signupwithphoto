@@ -32,18 +32,17 @@ import com.bbasoglu.core.extensions.hideKeyBoard
 import com.bbasoglu.core.extensions.showPopup
 import com.bbasoglu.core.ui.BaseFragment
 import com.bbasoglu.core.utils.FileUtils
-import com.bbasoglu.signup.R
+import com.bbasoglu.signup.data.model.ui.SignUpFragmentUiModel
 import com.bbasoglu.signup.databinding.FragmentSignupBinding
 import com.bbasoglu.signup.ui.signup.adapter.CustomAdapterEvent
-import com.bbasoglu.signup.ui.signup.adapter.SignUpAdapter
 import com.bbasoglu.signup.ui.signup.adapter.InputTextType
+import com.bbasoglu.signup.ui.signup.adapter.SignUpAdapter
 import com.bbasoglu.signup.ui.signup.adapter.data.SignUpHeaderData
 import com.bbasoglu.signup.ui.signup.adapter.data.SignUpInputViewData
 import com.bbasoglu.uimodule.adapter.BaseAdapterData
 import com.bbasoglu.uimodule.dialog.generic.BottomSheetGenericDialog
 import com.bbasoglu.uimodule.dialog.generic.SelectItemData
 import com.bbasoglu.uimodule.dialog.popup.Popup
-import com.bbasoglu.uimodule.toolbar.StandardCustomToolbar
 import com.bbasoglu.uimodule.toolbar.StandardToolbarData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -55,12 +54,14 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
+
 @AndroidEntryPoint
 class SignUpFragment: BaseFragment() {
     private val signupListAdapter by lazy {
         SignUpAdapter(::signUpListener)
     }
     companion object {
+        private const val SAVED_DATA = "SAVED_DATA"
         private const val MIME_TYPE_IMAGE = "image/*"
         private const val MAX_FILE_SIZE = 2_097_152 * 2L
     }
@@ -82,6 +83,17 @@ class SignUpFragment: BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         this.binding = FragmentSignupBinding.inflate(inflater)
+        val signUpFragmentUiModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState?.getParcelable(SAVED_DATA, SignUpFragmentUiModel::class.java)
+        } else {
+            savedInstanceState?.getParcelable<SignUpFragmentUiModel>(SAVED_DATA)
+        }
+        viewModel.signUpFragmentUiModel.value.path?.let {
+            signUpFragmentUiModel?.path = it
+        }
+        signUpFragmentUiModel?.let {
+            viewModel.setSignUpFragmentUiModel(it)
+        }
         return binding.root
     }
 
@@ -93,6 +105,12 @@ class SignUpFragment: BaseFragment() {
         setToolbar()
 
     }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putParcelable(SAVED_DATA, viewModel.signUpFragmentUiModel.value)
+    }
+
 
     private fun initViewListeners() {
         binding.continueBtn.setOnClickListener {
@@ -156,28 +174,33 @@ class SignUpFragment: BaseFragment() {
             getString(com.bbasoglu.common.R.string.profile_creation),
             getString(com.bbasoglu.common.R.string.use_form_exp),
             getString(com.bbasoglu.common.R.string.add_avatar),
+            path = viewModel.signUpFragmentUiModel.value.path
         ),
         SignUpInputViewData(
             id = "2",
             hint = getString(com.bbasoglu.common.R.string.first_name),
             input = InputTextType.FIRST_NAME,
+            text = viewModel.signUpFragmentUiModel.value.name
         ),
         SignUpInputViewData(
             id = "3",
             hint = getString(com.bbasoglu.common.R.string.email_address),
             input = InputTextType.EMAIL,
-            isRequired = true
+            isRequired = true,
+            text = viewModel.signUpFragmentUiModel.value.email
         ),
         SignUpInputViewData(
             id = "4",
             hint = getString(com.bbasoglu.common.R.string.password),
             input = InputTextType.PASSWORD,
-            isRequired = true
+            isRequired = true,
+            text = viewModel.signUpFragmentUiModel.value.password
         ),
         SignUpInputViewData(
             id = "5",
             hint = getString(com.bbasoglu.common.R.string.website),
             input = InputTextType.WEBSITE,
+            text = viewModel.signUpFragmentUiModel.value.website
         )
     )
 
@@ -272,6 +295,7 @@ class SignUpFragment: BaseFragment() {
     }
 
     private fun takePicture() {
+        viewModel.setSignUpFragmentUiModel(signupListAdapter.getLoginData())
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Create the File where the photo should go
         val photoFile: File? = try {
@@ -335,16 +359,12 @@ class SignUpFragment: BaseFragment() {
         }
     }
     private fun getFilePath(imageFile: File){
-        lifecycleScope.launch {
-            with(Dispatchers.IO){
-                val filePath: String = imageFile.path
-                setImage(filePath)
-            }
-
-        }
+        val filePath: String = imageFile.path
+        setImage(filePath)
     }
 
     private fun setImage(path:String){
+        viewModel.alterPathSignUpFragmentUiModel(path)
         signupListAdapter.insertImage(path)
     }
     private val cameraLauncher = registerForActivityResult(
